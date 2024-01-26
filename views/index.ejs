@@ -1,0 +1,23 @@
+<%- include ('partials/header.ejs') %>
+
+<body>
+  <div class="container">
+    <hr />
+    <h1> <%= user.username %> </h1>
+    <hr />
+    <!-- <a href="/perguntar" class="btn btn-primary">Perguntar</a> -->
+    <hr />
+    <% user.links.forEach(link =>{ %>
+    <br />
+    <div class="card">
+      <div class="card-body <%= link.tipo %>">
+        <h3><%= link.link %></h3>
+        <p><%= link.tipo %></p>
+      </div>
+    </div>
+    <% }) %>
+    <hr />
+  </div>
+</body>
+
+<%- include ('partials/footer.ejs') %>
