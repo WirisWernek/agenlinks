@@ -1,34 +1,52 @@
-const express = require("express");
-const bodyparser = require("body-parser");
-require("dotenv").config();
+const express = require('express');
+const bodyparser = require('body-parser');
+const connection = require('./database/database');
+const Usuario = require('./database/Usuario');
+const Link = require('./database/Link');
+require('dotenv').config();
 const app = express();
 
-app.set("view engine", "ejs");
-app.use(express.static("public"));
+connection
+	.authenticate()
+	.then(() => {
+		console.log('Conexão realizada com sucesso');
+	})
+	.catch((msgErro) => {
+		console.log(msgErro);
+	});
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.use(
-  bodyparser.urlencoded({
-    extended: false,
-  })
+	bodyparser.urlencoded({
+		extended: false,
+	})
 );
+
 app.use(bodyparser.json());
 
-app.get("/", (req, res) => {
-  let user = {
-    username: "Wiris Wernek",
-    links: [
-      { link: "https://github.com/WirisWernek", tipo: "GITHUB" },
-      { link: "https://www.linkedin.com/in/wiris-wernek", tipo: "LINKEDIN" },
-      { link: "https://www.instagram.com/wiriswernek", tipo: "INSTAGRAM" },
-      { link: "https://www.twitch.tv/lost905", tipo: "TWITCH" },
-      { link: "https://www.youtube.com/@wiriswernek", tipo: "YOUTUBE" },
-      { link: "https://home-wiriswernek.vercel.app", tipo: "PORTIFOLIO" },
-      { link: "https://twitter.com/wiriswernek", tipo: "TWITTER" },
-      { link: "https://home-wiriswernek.vercel.app", tipo: "OUTROS" },
-    ],
-  };
-  res.render("index", { user: user });
+app.get('/:username', (req, res) => {
+	let username = req.params.username;
+
+	Usuario.findOne({ where: { username: username } }).then((usuario) => {
+		if (usuario != undefined) {
+			Link.findAll({ where: { usuarioId: usuario.id }, order: [['tipo', 'ASC']] }).then(
+				(links) => {
+					let user = {
+						username: usuario.nome,
+						descricao: usuario.descricao,
+						subtitulo: usuario.subtitulo,
+						links: links,
+					};
+					res.render('index', { user: user });
+				}
+			);
+		} else {
+			res.render('user-not-found', { username: username });
+		}
+	});
 });
 
 app.listen(5000, () => {
-  console.log("App rodando");
+	console.log('App rodando');
 });

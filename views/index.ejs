@@ -1,23 +1,24 @@
 <%- include ('partials/header.ejs') %>
 
 <body>
-  <div class="container">
-    <hr />
-    <h1> <%= user.username %> </h1>
-    <hr />
-    <!-- <a href="/perguntar" class="btn btn-primary">Perguntar</a> -->
-    <hr />
-    <% user.links.forEach(link =>{ %>
-    <br />
-    <div class="card">
-      <div class="card-body <%= link.tipo %>">
-        <h3><%= link.link %></h3>
-        <p><%= link.tipo %></p>
-      </div>
+	<div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+		<h1><%= user.username %></h1>
+    	<% if (user.subtitulo) { %>
+      		<h3><%= user.subtitulo %></h2>
+		<% } %>
+		<% if (user.descricao) { %>
+			<p><%= user.descricao %></p>
+		<% } %>
     </div>
-    <% }) %>
-    <hr />
-  </div>
+
+	<div class="d-flex gap-1 flex-column justify-content-center align-items-center">
+	<% user.links.forEach(link =>{ %>
+		<a class="btn w-50 <%= link.tipo %>" href="<%= link.url %>" target="_blank"><%= link.tipo.toLowerCase() %></a>
+	<% }) %>
+	<div />
+
+	</div>
 </body>
 
 <%- include ('partials/footer.ejs') %>
