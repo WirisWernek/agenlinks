@@ -11,6 +11,10 @@ const Usuario = connection.define("tb_usuarios", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+  foto: {
+    type: Sequelize.TEXT,
+    allowNull: true,
+  },
   subtitulo: {
     type: Sequelize.TEXT,
     allowNull: true,

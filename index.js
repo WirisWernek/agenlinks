@@ -26,7 +26,7 @@ app.use(
 app.use(bodyparser.json());
 
 app.get('/:username', (req, res) => {
-	let username = req.params.username;
+	let username = req.params.username.toLocaleLowerCase();
 
 	Usuario.findOne({ where: { username: username } }).then((usuario) => {
 		if (usuario != undefined) {
@@ -35,6 +35,7 @@ app.get('/:username', (req, res) => {
 					let user = {
 						username: usuario.nome,
 						descricao: usuario.descricao,
+						foto: usuario.foto,
 						subtitulo: usuario.subtitulo,
 						links: links,
 					};
